@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 def register(request):
     if request.method == 'POST':
         form=UserRegisterForm(request.POST)
@@ -15,11 +16,13 @@ def register(request):
         form=UserRegisterForm()
     return render(request,'users/register.html',{'form':form})
 
+
+@login_required
 def profile(request):
     if request.method=='POST':
         u_update=UserUpdateForm(request.POST,instance=request.user)
         #instance=request.user means the present instance of the user will be displayed on the form
-        p_update=ProfileUpdateForm(request.POST,request.FILES)
+        p_update=ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
         if u_update.is_valid() and p_update.is_valid():
             u_update.save()
             p_update.save()
@@ -27,7 +30,7 @@ def profile(request):
             return redirect('profile')
     else:
         u_update=UserUpdateForm(instance=request.user)
-        p_update=ProfileUpdateForm()
+        p_update=ProfileUpdateForm(instance=request.user.profile)
 
     context={
         'u_update':u_update,

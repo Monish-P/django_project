@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-mb06577%ra@!6^(qaqvjvr#j+jdx26347lb_ot0o5g7$be5j5m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','monish-blog.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -129,9 +130,22 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK='bootstrap4'
 
 LOGIN_REDIRECT_URL = 'Blog-home'
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+
+AWS_ACCESS_KEY_ID = "AKIAX5CWDUQGBWQNPA7N"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME="monish-django-blog-files"
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_LOCATION = 'static'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
